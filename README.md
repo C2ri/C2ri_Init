@@ -6,7 +6,7 @@
 
 1-1. Git Flow 전략에 따른 Branch Depth
 
-- Main
+- Master
 - Hotfixes
 - Release
 - Develop
