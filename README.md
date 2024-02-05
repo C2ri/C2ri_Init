@@ -23,7 +23,7 @@
 1-3. Branch명 컨벤션
 
 - 브랜치명/파트/기능이름(#깃 이슈넘버)
-- ex. Feature/FE/Social Login(#1)
+- ex. feature/FE/Social Login(#1)
 
 ### 2. Commit
 
