@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("org.springframework.boot") version "3.2.1"
     id("io.spring.dependency-management") version "1.1.4"
+    id("org.jetbrains.kotlin.plugin.jpa") version "1.9.21"
     kotlin("jvm") version "1.9.21"
     kotlin("plugin.spring") version "1.9.21"
 }
@@ -34,6 +35,10 @@ dependencies {
     /* Lombok */
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
+    /* DB */
+    runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
+    /* JPA */
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     /* Spring Security */
     implementation("org.springframework.boot:spring-boot-starter-security")
     testImplementation("org.springframework.security:spring-security-test")
