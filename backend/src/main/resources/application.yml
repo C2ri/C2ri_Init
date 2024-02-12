@@ -1,3 +1,20 @@
 spring:
   profiles:
     active: dev
+
+logging:
+  pattern:
+    console: "[%d{HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"
+  level:
+    org:
+      hibernate:
+        SQL: debug
+        type.descriptor.sql: trace
+
+jwt:
+  secret: DadFufN4Oui8Bfv3ScFj6R9fyJ9hD45E6AGFsXgFsRhT4YSdSb
+
+custom:
+  oatuth2:
+    kakao:
+      client-id: 82724cf438a56afe753e81eb3965ceca
