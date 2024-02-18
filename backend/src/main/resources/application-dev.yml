@@ -2,10 +2,10 @@ server:
   port: 8080
 spring:
   datasource:
-    url: jdbc:mariadb://localhost:3306/sheruleiho
+    url: jdbc:mariadb://3.34.199.25:3306/shuttlayho
     driver-class-name: org.mariadb.jdbc.Driver
-    username: root
-    password: 1234
+    username: ceri
+    password: Tjflxla@@
   jpa:
     open-in-view: false
     generate-ddl: true
