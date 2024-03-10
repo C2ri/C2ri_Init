@@ -25,15 +25,15 @@ class SurveyService(private val surveyRepository: SurveyRepository) {
         return surveyRepository.findById(surveyId).orElse(null)
     }
 
-    fun updateSurvey(surveyId: Long, surveyRequest: SurveyRequest) {
-        val survey = surveyRepository.findById(surveyId)
+    fun updateSurvey(surveyRequest: SurveyRequest) {
+        val survey = surveyRepository.findById(surveyRequest.surveyId)
         if (survey.isPresent) {
             survey.get().apply {
                 rating = surveyRequest.rating
                 content = surveyRequest.content
                 userId = surveyRequest.userId
             }
-            //surveyRepository.save(survey) entity로 변환필요
+            surveyRepository.save(survey.orElseThrow())
         }
     }
 

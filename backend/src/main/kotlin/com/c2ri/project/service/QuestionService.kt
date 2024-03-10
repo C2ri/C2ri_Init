@@ -29,8 +29,8 @@ class QuestionService(private val questionRepository: QuestionRepository) {
         return questionRepository.findById(questionId).orElse(null)
     }
 
-    fun updateQuestion(questionId: Long, questionRequest: QuestionRequest) {
-        val question = questionRepository.findById(questionId)
+    fun updateQuestion(questionRequest: QuestionRequest) {
+        val question = questionRepository.findById(questionRequest.questionId)
         if (question.isPresent) {
             question.get().apply {
                 title = questionRequest.title

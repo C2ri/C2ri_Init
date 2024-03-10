@@ -31,8 +31,8 @@ class RouteService(private val routeRepository: RouteRepository) {
         return routeRepository.findById(routeId).orElse(null)
     }
 
-    fun updateRoute(routeId: Long, routeRequest: RouteRequest) {
-        val route = routeRepository.findById(routeId)
+    fun updateRoute(routeRequest: RouteRequest) {
+        val route = routeRepository.findById(routeRequest.routeId)
         if (route.isPresent) {
             route.get().apply {
                 departureLocation = routeRequest.departureLocation

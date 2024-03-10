@@ -23,24 +23,21 @@ class StationController(private val stationService: StationService) {
         return ResponseEntity(stations, HttpStatus.OK)
     }
 
-    @GetMapping("/{stationId}")
-    fun getStationById(@PathVariable stationId: Long): ResponseEntity<Station> {
+    @PostMapping("/find")
+    fun getStationById(@RequestBody stationId: Long): ResponseEntity<Station> {
         val station = stationService.getStationById(stationId)
         return station?.let { ResponseEntity(it, HttpStatus.OK) }
                 ?: ResponseEntity(HttpStatus.NOT_FOUND)
     }
 
-    @PutMapping("/{stationId}")
-    fun updateStation(
-            @PathVariable stationId: Long,
-            @RequestBody stationRequest: StationRequest
-    ): ResponseEntity<Void> {
-        stationService.updateStation(stationId, stationRequest)
+    @PutMapping
+    fun updateStation(@RequestBody stationRequest: StationRequest): ResponseEntity<Void> {
+        stationService.updateStation(stationRequest)
         return ResponseEntity(HttpStatus.OK)
     }
 
-    @DeleteMapping("/{stationId}")
-    fun deleteStation(@PathVariable stationId: Long): ResponseEntity<Void> {
+    @DeleteMapping
+    fun deleteStation(@RequestBody stationId: Long): ResponseEntity<Void> {
         stationService.deleteStation(stationId)
         return ResponseEntity(HttpStatus.NO_CONTENT)
     }

@@ -1,7 +1,7 @@
 package com.c2ri.project.service
 
 import com.c2ri.project.domain.Vehicle
-import com.c2ri.project.dto.test.request.VehicleRepository
+import com.c2ri.project.repository.VehicleRepository
 import com.c2ri.project.dto.test.request.VehicleRequest
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -11,6 +11,7 @@ class VehicleService(private val vehicleRepository: VehicleRepository) {
 
     fun saveVehicle(vehicleRequest: VehicleRequest) {
         val vehicle = Vehicle(
+                routeId = vehicleRequest.routeId,
                 seatNumber = vehicleRequest.seatNumber,
                 manufacturingCompany = vehicleRequest.manufacturingCompany,
                 vehicleNumber = vehicleRequest.vehicleNumber,
@@ -30,10 +31,11 @@ class VehicleService(private val vehicleRepository: VehicleRepository) {
         return vehicleRepository.findById(vehicleId).orElse(null)
     }
 
-    fun updateVehicle(vehicleId: Long, vehicleRequest: VehicleRequest) {
-        val vehicle = vehicleRepository.findById(vehicleId)
+    fun updateVehicle(vehicleRequest: VehicleRequest) {
+        val vehicle = vehicleRepository.findById(vehicleRequest.vehicleId)
         if (vehicle.isPresent) {
             vehicle.get().apply {
+                routeId = vehicleRequest.routeId
                 seatNumber = vehicleRequest.seatNumber
                 manufacturingCompany = vehicleRequest.manufacturingCompany
                 vehicleNumber = vehicleRequest.vehicleNumber

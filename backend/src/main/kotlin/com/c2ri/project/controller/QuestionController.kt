@@ -23,24 +23,21 @@ class QuestionController(private val questionService: QuestionService) {
         return ResponseEntity(questions, HttpStatus.OK)
     }
 
-    @GetMapping("/{questionId}")
-    fun getQuestionById(@PathVariable questionId: Long): ResponseEntity<Question> {
+    @PostMapping("/find")
+    fun getQuestionById(@RequestBody questionId: Long): ResponseEntity<Question> {
         val question = questionService.getQuestionById(questionId)
         return question?.let { ResponseEntity(it, HttpStatus.OK) }
                 ?: ResponseEntity(HttpStatus.NOT_FOUND)
     }
 
-    @PutMapping("/{questionId}")
-    fun updateQuestion(
-            @PathVariable questionId: Long,
-            @RequestBody questionRequest: QuestionRequest
-    ): ResponseEntity<Void> {
-        questionService.updateQuestion(questionId, questionRequest)
+    @PutMapping
+    fun updateQuestion(@RequestBody questionRequest: QuestionRequest): ResponseEntity<Void> {
+        questionService.updateQuestion(questionRequest)
         return ResponseEntity(HttpStatus.OK)
     }
 
-    @DeleteMapping("/{questionId}")
-    fun deleteQuestion(@PathVariable questionId: Long): ResponseEntity<Void> {
+    @DeleteMapping
+    fun deleteQuestion(@RequestBody questionId: Long): ResponseEntity<Void> {
         questionService.deleteQuestion(questionId)
         return ResponseEntity(HttpStatus.NO_CONTENT)
     }

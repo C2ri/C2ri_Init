@@ -34,8 +34,8 @@ class NotificationService(
     }
 
     @Transactional
-    fun updateNotification(notificationId: Long, notificationRequest: NotificationRequest) {
-        val notification = notificationRepository.findById(notificationId)
+    fun updateNotification(notificationRequest: NotificationRequest) {
+        val notification = notificationRepository.findById(notificationRequest.notificationId)
         if (notification.isPresent) {
             notification.get().apply {
                 userId = notificationRequest.userId

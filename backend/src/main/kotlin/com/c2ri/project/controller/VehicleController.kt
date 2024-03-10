@@ -23,19 +23,16 @@ class VehicleController(private val vehicleService: VehicleService) {
         return ResponseEntity(vehicles, HttpStatus.OK)
     }
 
-    @GetMapping("/{vehicleId}")
-    fun getVehicleById(@PathVariable vehicleId: Long): ResponseEntity<Vehicle> {
+    @GetMapping("/find")
+    fun getVehicleById(@RequestBody vehicleId: Long): ResponseEntity<Vehicle> {
         val vehicle = vehicleService.getVehicleById(vehicleId)
         return vehicle?.let { ResponseEntity(it, HttpStatus.OK) }
                 ?: ResponseEntity(HttpStatus.NOT_FOUND)
     }
 
-    @PutMapping("/{vehicleId}")
-    fun updateVehicle(
-            @PathVariable vehicleId: Long,
-            @RequestBody vehicleRequest: VehicleRequest
-    ): ResponseEntity<Void> {
-        vehicleService.updateVehicle(vehicleId, vehicleRequest)
+    @PutMapping
+    fun updateVehicle(@RequestBody vehicleRequest: VehicleRequest): ResponseEntity<Void> {
+        vehicleService.updateVehicle(vehicleRequest)
         return ResponseEntity(HttpStatus.OK)
     }
 
