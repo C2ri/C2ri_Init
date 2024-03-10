@@ -28,8 +28,8 @@ class SeatService(private val seatRepository: SeatRepository) {
         return seatRepository.findById(seatId).orElse(null)
     }
 
-    fun updateSeat(seatId: Long, seatRequest: SeatRequest) {
-        val seat = seatRepository.findById(seatId)
+    fun updateSeat(seatRequest: SeatRequest) {
+        val seat = seatRepository.findById(seatRequest.seatId)
         if (seat.isPresent) {
             seat.get().apply {
                 vehicleId = seatRequest.vehicleId

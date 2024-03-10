@@ -23,24 +23,21 @@ class SeatController(private val seatService: SeatService) {
         return ResponseEntity(seats, HttpStatus.OK)
     }
 
-    @GetMapping("/{seatId}")
-    fun getSeatById(@PathVariable seatId: Long): ResponseEntity<Seat> {
+    @PostMapping("/find")
+    fun getSeatById(@RequestBody seatId: Long): ResponseEntity<Seat> {
         val seat = seatService.getSeatById(seatId)
         return seat?.let { ResponseEntity(it, HttpStatus.OK) }
                 ?: ResponseEntity(HttpStatus.NOT_FOUND)
     }
 
-    @PutMapping("/{seatId}")
-    fun updateSeat(
-            @PathVariable seatId: Long,
-            @RequestBody seatRequest: SeatRequest
-    ): ResponseEntity<Void> {
-        seatService.updateSeat(seatId, seatRequest)
+    @PutMapping
+    fun updateSeat(@RequestBody seatRequest: SeatRequest): ResponseEntity<Void> {
+        seatService.updateSeat(seatRequest)
         return ResponseEntity(HttpStatus.OK)
     }
 
-    @DeleteMapping("/{seatId}")
-    fun deleteSeat(@PathVariable seatId: Long): ResponseEntity<Void> {
+    @DeleteMapping
+    fun deleteSeat(@RequestBody seatId: Long): ResponseEntity<Void> {
         seatService.deleteSeat(seatId)
         return ResponseEntity(HttpStatus.NO_CONTENT)
     }

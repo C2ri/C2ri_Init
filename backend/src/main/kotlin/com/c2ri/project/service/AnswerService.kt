@@ -33,8 +33,8 @@ class AnswerService(private val answerRepository: AnswerRepository) {
         return answerRepository.findById(answerId).orElse(null)
     }
 
-    fun updateAnswer(answerId: Long, answerRequest: AnswerRequest) {
-        val answer = answerRepository.findById(answerId)
+    fun updateAnswer(answerRequest: AnswerRequest) {
+        val answer = answerRepository.findById(answerRequest.answerId)
         if (answer.isPresent) {
             answer.get().apply {
                 questionId = answerRequest.questionId

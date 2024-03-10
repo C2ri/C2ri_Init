@@ -23,24 +23,21 @@ class RouteController(private val routeService: RouteService) {
         return ResponseEntity(routes, HttpStatus.OK)
     }
 
-    @GetMapping("/{routeId}")
-    fun getRouteById(@PathVariable routeId: Long): ResponseEntity<Route> {
+    @PostMapping("/find")
+    fun getRouteById(@RequestBody routeId: Long): ResponseEntity<Route> {
         val route = routeService.getRouteById(routeId)
         return route?.let { ResponseEntity(it, HttpStatus.OK) }
                 ?: ResponseEntity(HttpStatus.NOT_FOUND)
     }
 
-    @PutMapping("/{routeId}")
-    fun updateRoute(
-            @PathVariable routeId: Long,
-            @RequestBody routeRequest: RouteRequest
-    ): ResponseEntity<Void> {
-        routeService.updateRoute(routeId, routeRequest)
+    @PutMapping
+    fun updateRoute(@RequestBody routeRequest: RouteRequest): ResponseEntity<Void> {
+        routeService.updateRoute(routeRequest)
         return ResponseEntity(HttpStatus.OK)
     }
 
-    @DeleteMapping("/{routeId}")
-    fun deleteRoute(@PathVariable routeId: Long): ResponseEntity<Void> {
+    @DeleteMapping
+    fun deleteRoute(@RequestBody routeId: Long): ResponseEntity<Void> {
         routeService.deleteRoute(routeId)
         return ResponseEntity(HttpStatus.NO_CONTENT)
     }

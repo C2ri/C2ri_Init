@@ -23,19 +23,16 @@ class AnswerController(private val answerService: AnswerService) {
         return ResponseEntity(answers, HttpStatus.OK)
     }
 
-    @GetMapping("/{answerId}")
-    fun getAnswerById(@PathVariable answerId: Long): ResponseEntity<Answer> {
+    @PostMapping("/find")
+    fun getAnswerById(@RequestBody answerId: Long): ResponseEntity<Answer> {
         val answer = answerService.getAnswerById(answerId)
         return answer?.let { ResponseEntity(it, HttpStatus.OK) }
                 ?: ResponseEntity(HttpStatus.NOT_FOUND)
     }
 
-    @PutMapping("/{answerId}")
-    fun updateAnswer(
-            @PathVariable answerId: Long,
-            @RequestBody answerRequest: AnswerRequest
-    ): ResponseEntity<Void> {
-        answerService.updateAnswer(answerId, answerRequest)
+    @PutMapping
+    fun updateAnswer(@RequestBody answerRequest: AnswerRequest): ResponseEntity<Void> {
+        answerService.updateAnswer(answerRequest)
         return ResponseEntity(HttpStatus.OK)
     }
 

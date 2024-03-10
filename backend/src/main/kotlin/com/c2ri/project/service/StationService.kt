@@ -32,8 +32,8 @@ class StationService(private val stationRepository: StationRepository) {
         return stationRepository.findById(stationId).orElse(null)
     }
 
-    fun updateStation(stationId: Long, stationRequest: StationRequest) {
-        val station = stationRepository.findById(stationId)
+    fun updateStation(stationRequest: StationRequest) {
+        val station = stationRepository.findById(stationRequest.stationId)
         if (station.isPresent) {
             station.get().apply {
                 routeId = stationRequest.routeId

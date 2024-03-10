@@ -17,31 +17,28 @@ class NotificationController(private val notificationService: NotificationServic
         return ResponseEntity(HttpStatus.CREATED)
     }
 
-    @GetMapping("/{notificationId}")
-    fun getNotificationById(@PathVariable notificationId: Long): ResponseEntity<Notification> {
+    @PostMapping("/find")
+    fun getNotificationById(@RequestBody notificationId: Long): ResponseEntity<Notification> {
         val notification = notificationService.getNotificationById(notificationId)
         return notification?.let { ResponseEntity(it, HttpStatus.OK) }
                 ?: ResponseEntity(HttpStatus.NOT_FOUND)
     }
 
     //추후 Spring Security 내 유저ID 기준으로 검색
-    @GetMapping("/user/{userId}")
-    fun getNotificationsByUserId(@PathVariable userId: Long): ResponseEntity<List<Notification>> {
+    @PostMapping("/user")
+    fun getNotificationsByUserId(@RequestBody userId: Long): ResponseEntity<List<Notification>> {
         val notifications = notificationService.getNotificationsByUserId(userId)
         return ResponseEntity(notifications, HttpStatus.OK)
     }
 
-    @PutMapping("/{notificationId}")
-    fun updateNotification(
-            @PathVariable notificationId: Long,
-            @RequestBody notificationRequest: NotificationRequest
-    ): ResponseEntity<Void> {
-        notificationService.updateNotification(notificationId, notificationRequest)
+    @PutMapping
+    fun updateNotification(@RequestBody notificationRequest: NotificationRequest): ResponseEntity<Void> {
+        notificationService.updateNotification(notificationRequest)
         return ResponseEntity(HttpStatus.OK)
     }
 
-    @DeleteMapping("/{notificationId}")
-    fun deleteNotification(@PathVariable notificationId: Long): ResponseEntity<Void> {
+    @DeleteMapping
+    fun deleteNotification(@RequestBody notificationId: Long): ResponseEntity<Void> {
         notificationService.deleteNotification(notificationId)
         return ResponseEntity(HttpStatus.NO_CONTENT)
     }

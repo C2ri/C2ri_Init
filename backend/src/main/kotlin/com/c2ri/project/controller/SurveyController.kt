@@ -17,30 +17,21 @@ class SurveyController(private val surveyService: SurveyService) {
         return ResponseEntity(HttpStatus.CREATED)
     }
 
-    @GetMapping
-    fun getAllSurveys(): ResponseEntity<List<Survey>> {
-        val surveys = surveyService.getAllSurveys()
-        return ResponseEntity(surveys, HttpStatus.OK)
-    }
-
-    @GetMapping("/{surveyId}")
-    fun getSurveyById(@PathVariable surveyId: Long): ResponseEntity<Survey> {
+    @PostMapping("/find")
+    fun getSurveyById(@RequestBody surveyId: Long): ResponseEntity<Survey> {
         val survey = surveyService.getSurveyById(surveyId)
         return survey?.let { ResponseEntity(it, HttpStatus.OK) }
                 ?: ResponseEntity(HttpStatus.NOT_FOUND)
     }
 
-    @PutMapping("/{surveyId}")
-    fun updateSurvey(
-            @PathVariable surveyId: Long,
-            @RequestBody surveyRequest: SurveyRequest
-    ): ResponseEntity<Void> {
-        surveyService.updateSurvey(surveyId, surveyRequest)
+    @PutMapping
+    fun updateSurvey(@RequestBody surveyRequest: SurveyRequest): ResponseEntity<Void> {
+        surveyService.updateSurvey(surveyRequest)
         return ResponseEntity(HttpStatus.OK)
     }
 
-    @DeleteMapping("/{surveyId}")
-    fun deleteSurvey(@PathVariable surveyId: Long): ResponseEntity<Void> {
+    @DeleteMapping
+    fun deleteSurvey(@RequestBody surveyId: Long): ResponseEntity<Void> {
         surveyService.deleteSurvey(surveyId)
         return ResponseEntity(HttpStatus.NO_CONTENT)
     }
