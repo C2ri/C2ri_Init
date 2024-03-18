@@ -1,43 +1,33 @@
 package com.c2ri.project.auth
 
-import com.c2ri.project.service.UserDetailsServiceImpl
+import com.c2ri.project.service.UserService
 import com.c2ri.project.util.JwtUtils
 import jakarta.servlet.FilterChain
-import jakarta.servlet.ServletRequest
-import jakarta.servlet.ServletResponse
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.core.userdetails.UserDetails
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.stereotype.Component
-import org.springframework.util.StringUtils
-import org.springframework.web.filter.GenericFilterBean
 import org.springframework.web.filter.OncePerRequestFilter
 
 @Component
-class JwtAuthenticationFilter : OncePerRequestFilter() {
-
-    @Autowired
-    private lateinit var jwtUtils: JwtUtils
-
-    @Autowired
-    private lateinit var userDetailsServiceImpl: UserDetailsServiceImpl
+class JwtAuthenticationFilter(
+        private val jwtUtils: JwtUtils, //TODO lateinit 을 안써도 되는지 확인
+        private val userService: UserService
+): OncePerRequestFilter() {
 
     override fun doFilterInternal(
             request: HttpServletRequest,
             response: HttpServletResponse,
             filterChain: FilterChain
     ) {
+        println("jwt 필터") //TODO LOGGING 대체 예정
         val jwtToken = extractJwtTokenFromRequest(request)
         if (jwtToken != null && jwtUtils.validateJwtToken(jwtToken)) {
-            val userId = jwtUtils.getUserIdFromJwtToken(jwtToken)
-            val userDetails: UserDetails = userDetailsServiceImpl.loadUserById(userId)
-            val authentication = UsernamePasswordAuthenticationToken(userDetails, null, userDetails.authorities)
-            authentication.details = WebAuthenticationDetailsSource().buildDetails(request)
-            SecurityContextHolder.getContext().authentication = authentication
+            val userEmail = jwtUtils.getUserEmailFromJwtToken(jwtToken) //TODO 일단 이 부분에서 DB 고민해야하는 것 : PK를 userId, email 중 무엇으로 해야하는가?
+            //TODO 만약 유효하다면 DB를 재조회할 필요가 있을까?
+            //val userDetails: UserDetails = userService.loadUserByEmail(userEmail)
+            //val authentication = UsernamePasswordAuthenticationToken(userDetails, null, userDetails.authorities)
+            //authentication.details = WebAuthenticationDetailsSource().buildDetails(request)
+            //SecurityContextHolder.getContext().authentication = authentication
         }
         filterChain.doFilter(request, response)
     }

@@ -48,6 +48,9 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
     /* Swagger */
     implementation ("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
+    /* OAuth2 */
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+    //implementation ("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 }
 
 tasks.withType<KotlinCompile> {
