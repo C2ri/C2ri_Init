@@ -11,8 +11,8 @@ data class User(
         @Column(name = "userId")
         val userId: Long? = null,
 
-        @Column(name = "oauthId")
-        val oauthId: Long,
+        @Column(name = "email")
+        val email: String,
 
         @Column(name = "nickname")
         val nickname: String,

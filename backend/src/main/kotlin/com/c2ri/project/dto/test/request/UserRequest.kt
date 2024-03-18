@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 
 data class UserRequest (
     val userId: Long? = null,
-    val oauthId: Long,
+    val email: String,
     val nickname: String,
     val location: String,
     val profileUrl: String,

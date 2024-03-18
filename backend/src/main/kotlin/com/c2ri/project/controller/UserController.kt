@@ -17,9 +17,15 @@ class UserController(private val userService: UserService) {
         return ResponseEntity(HttpStatus.CREATED)
     }
 
+    @GetMapping
+    fun getAllUsers(): ResponseEntity<List<User>> {
+        val users = userService.getAllUsers()
+        return ResponseEntity(users, HttpStatus.OK)
+    }
+
     @PostMapping("/auth")
-    fun getUserByOauthId(@RequestBody oauthId: Long): ResponseEntity<User> {
-        val user = userService.getUserByOauthId(oauthId)
+    fun getUserByEmail(@RequestBody email: String): ResponseEntity<User> {
+        val user = userService.getUserByEmail(email)
         return user?.let { ResponseEntity(it, HttpStatus.OK) }
                 ?: ResponseEntity(HttpStatus.NOT_FOUND)
     }

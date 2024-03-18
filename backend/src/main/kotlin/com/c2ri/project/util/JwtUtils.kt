@@ -13,21 +13,21 @@ class JwtUtils {
     @Value("\${jwt.secret}")
     private lateinit var jwtSecret: String
 
-    @Value("\${jwt.expiration}")
-    private var jwtExpiration: Int = 0
+    //@Value("\${jwt.expiration}")
+    private var jwtExpiration: Int = 50000
 
-    fun generateJwtToken(userId: Long): String {
+    fun generateToken(userEmail: String): String {
         return Jwts.builder()
-                .setSubject(userId.toString())
+                .setSubject(userEmail.toString())
                 .setIssuedAt(Date())
                 .setExpiration(Date(Date().time + jwtExpiration * 1000))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact()
     }
 
-    fun getUserIdFromJwtToken(token: String): Long {
+    fun getUserEmailFromJwtToken(token: String): String {
         val claims: Claims = Jwts.parserBuilder().setSigningKey(jwtSecret).build().parseClaimsJws(token).body
-        return claims.subject.toLong()
+        return claims.subject.toString()
     }
 
     fun validateJwtToken(token: String): Boolean {

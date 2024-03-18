@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 interface UserRepository : JpaRepository<User, Long> {
-    fun findByOauthId(oauthId: Long): User?
+    fun findByEmail(email: String): User?
 }
