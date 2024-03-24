@@ -1,5 +1,6 @@
 package com.c2ri.project.auth
 
+import com.c2ri.project.util.CustomSecurityContextHolder
 import com.c2ri.project.util.JwtUtils
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -10,12 +11,12 @@ import org.springframework.stereotype.Component
 
 @Component
 class OAuthLoginSuccessHandler : SimpleUrlAuthenticationSuccessHandler() {
-    private lateinit var jwtUtils: JwtUtils
     override fun onAuthenticationSuccess(request: HttpServletRequest, response: HttpServletResponse, authentication: Authentication) {
 
         //소설로그인 성공 로그 적재
         val oauth2User = authentication.principal as OAuth2User
         println("소셜로그인 성공 : $oauth2User")
+        println("onAuthenticationSuccess.authentication : ${CustomSecurityContextHolder.getAuthentication()}")
         //TODO JWT토큰 부여 부분만 추가할지 고민 중 => 그러나 서비스와 로직이 겹치기에 로깅만 하는게 좋아보임
 //        when {
 //            authentication.principal is OAuth2User -> {
@@ -67,11 +68,13 @@ class OAuthLoginSuccessHandler : SimpleUrlAuthenticationSuccessHandler() {
 //                    SecurityContextHolder.getContext().authentication = authentication
 //                }
 //
-//                val authToken: String = jwtUtils.generateToken(email) // JWT 토큰 생성
+//
+//                //Token 발급
+//                val accessToken: String = jwtUtils.generateToken(oauth2User.attributes["userId"]) // JWT 토큰 생성
 //                response.contentType = "application/json"
 //                response.characterEncoding = "UTF-8"
 //                response.writer.write(
-//                        "{\"token\":\"$authToken\"}" // 토큰을 JSON 형식으로 응답에 포함
+//                        "{\"token\":\"$accessToken\"}" // 토큰을 JSON 형식으로 응답에 포함
 //                )
 //            }
 //            else -> {

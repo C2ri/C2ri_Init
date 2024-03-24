@@ -7,15 +7,11 @@ import jakarta.persistence.*
 data class Survey(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "surveyId")
         val surveyId: Long? = null,
 
-        @Column(name = "rating")
         var rating: Int,
 
-        @Column(name = "content")
         var content: String,
 
-        @Column(name = "userId")
         var userId: Long
 )

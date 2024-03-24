@@ -1,26 +1,20 @@
 package com.c2ri.project.service
 
 import com.c2ri.project.domain.Notification
-import com.c2ri.project.dto.test.request.NotificationRequest
+import com.c2ri.project.dto.NotificationRequest
 import com.c2ri.project.repository.NotificationRepository
+import com.c2ri.project.util.CustomSecurityContextHolder
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class NotificationService(
-        private val notificationRepository: NotificationRepository
-) {
+class NotificationService(private val notificationRepository: NotificationRepository) {
 
-    @Transactional
+    private val logger = LoggerFactory.getLogger(NotificationService::class.java)
+
     fun saveNotification(notificationRequest: NotificationRequest) {
-        val notification = Notification(
-                userId = notificationRequest.userId,
-                notificationType = notificationRequest.notificationType,
-                identifier = notificationRequest.identifier,
-                status = notificationRequest.status,
-                createdDate = notificationRequest.createdDate
-        )
-        notificationRepository.save(notification)
+        notificationRepository.save(notificationRequest.toDomain())
     }
 
     @Transactional(readOnly = true)
@@ -33,22 +27,23 @@ class NotificationService(
         return notificationRepository.findByUserId(userId)
     }
 
-    @Transactional
     fun updateNotification(notificationRequest: NotificationRequest) {
-        val notification = notificationRepository.findById(notificationRequest.notificationId)
+        val userId = CustomSecurityContextHolder.getSessionUserId() ?: throw IllegalArgumentException("User ID cannot be null")
+        logger.info("Updating notification: $notificationRequest for user: $userId")
+        val notification = notificationRepository.findByNotificationIdAndUserId(notificationRequest.notificationId, userId)
         if (notification.isPresent) {
-            notification.get().apply {
-                userId = notificationRequest.userId
-                notificationType = notificationRequest.notificationType
-                identifier = notificationRequest.identifier
-                status = notificationRequest.status
-                createdDate = notificationRequest.createdDate
-            }
+            notificationRepository.save(notificationRequest.updateDomain(notification.get()))
+        } else {
+            throw IllegalArgumentException("Notification not found or user not authorized")
         }
     }
 
-    @Transactional
     fun deleteNotification(notificationId: Long) {
-        notificationRepository.deleteById(notificationId)
+        val userId = CustomSecurityContextHolder.getSessionUserId() ?: throw IllegalArgumentException("User ID cannot be null")
+        logger.info("Deleting notification with id : $notificationId for user: $userId")
+        val notification = notificationRepository.findByNotificationIdAndUserId(notificationId, userId)
+        if (notification.isPresent) {
+            notificationRepository.delete(notification.get())
+        }
     }
 }

@@ -1,24 +1,19 @@
 package com.c2ri.project.service
 
 import com.c2ri.project.domain.Question
-import com.c2ri.project.dto.test.request.QuestionRequest
+import com.c2ri.project.dto.QuestionRequest
 import com.c2ri.project.repository.QuestionRepository
+import com.c2ri.project.util.CustomSecurityContextHolder
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 
 @Service
 class QuestionService(private val questionRepository: QuestionRepository) {
 
+    private val logger = LoggerFactory.getLogger(QuestionService::class.java)
+
     fun saveQuestion(questionRequest: QuestionRequest) {
-        val question = Question(
-                userId = questionRequest.userId,
-                title = questionRequest.title,
-                content = questionRequest.content,
-                status = questionRequest.status,
-                createdDate = LocalDateTime.now(),
-                modifiedDate = LocalDateTime.now()
-        )
-        questionRepository.save(question)
+        questionRepository.save(questionRequest.toDomain())
     }
 
     fun getAllQuestions(): List<Question> {
@@ -30,18 +25,22 @@ class QuestionService(private val questionRepository: QuestionRepository) {
     }
 
     fun updateQuestion(questionRequest: QuestionRequest) {
-        val question = questionRepository.findById(questionRequest.questionId)
+        val userId = CustomSecurityContextHolder.getSessionUserId() ?: throw IllegalArgumentException("User ID cannot be null")
+        logger.info("Updating question: $questionRequest for user: $userId")
+        val question = questionRepository.findByQuestionIdAndUserId(questionRequest.questionId, userId)
         if (question.isPresent) {
-            question.get().apply {
-                title = questionRequest.title
-                content = questionRequest.content
-                status = questionRequest.status
-                modifiedDate = LocalDateTime.now()
-            }
+            questionRepository.save(questionRequest.updateDomain(question.get()))
+        } else {
+            throw IllegalArgumentException("Question not found or user not authorized")
         }
     }
 
     fun deleteQuestion(questionId: Long) {
-        questionRepository.deleteById(questionId)
+        val userId = CustomSecurityContextHolder.getSessionUserId() ?: throw IllegalArgumentException("User ID cannot be null")
+        logger.info("Deleting question with id : $questionId for user: $userId")
+        val question = questionRepository.findByQuestionIdAndUserId(questionId, userId)
+        if (question.isPresent) {
+            questionRepository.delete(question.get())
+        }
     }
 }
