@@ -8,27 +8,19 @@ import java.time.LocalDateTime
 data class User(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "userId")
         val userId: Long? = null,
 
-        @Column(name = "email")
         val email: String,
 
-        @Column(name = "nickname")
         val nickname: String,
 
-        @Column(name = "location")
         val location: String,
 
-        @Column(name = "profileUrl")
         val profileUrl: String,
 
-        @Column(name = "createdDate")
         val createdDate: LocalDateTime? = null,
 
-        @Column(name = "modifiedDate")
         val modifiedDate: LocalDateTime? = null,
 
-        @Column(name = "status")
         val status: String
 )

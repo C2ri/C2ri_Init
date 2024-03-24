@@ -2,7 +2,6 @@ package com.c2ri.project.service.test
 
 import com.c2ri.project.domain.test.Test
 import com.c2ri.project.domain.test.TestRepository
-import com.c2ri.project.dto.test.request.TestRequest
 import com.c2ri.project.util.fail
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

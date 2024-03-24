@@ -1,26 +1,15 @@
 package com.c2ri.project.service
 
 import com.c2ri.project.domain.Vehicle
+import com.c2ri.project.dto.VehicleRequest
 import com.c2ri.project.repository.VehicleRepository
-import com.c2ri.project.dto.test.request.VehicleRequest
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 
 @Service
 class VehicleService(private val vehicleRepository: VehicleRepository) {
 
     fun saveVehicle(vehicleRequest: VehicleRequest) {
-        val vehicle = Vehicle(
-                routeId = vehicleRequest.routeId,
-                seatNumber = vehicleRequest.seatNumber,
-                manufacturingCompany = vehicleRequest.manufacturingCompany,
-                vehicleNumber = vehicleRequest.vehicleNumber,
-                vehicleType = vehicleRequest.vehicleType,
-                status = vehicleRequest.status,
-                createdDate = LocalDateTime.now(),
-                modifiedDate = LocalDateTime.now()
-        )
-        vehicleRepository.save(vehicle)
+        vehicleRepository.save(vehicleRequest.toDomain())
     }
 
     fun getAllVehicles(): List<Vehicle> {
@@ -32,17 +21,8 @@ class VehicleService(private val vehicleRepository: VehicleRepository) {
     }
 
     fun updateVehicle(vehicleRequest: VehicleRequest) {
-        val vehicle = vehicleRepository.findById(vehicleRequest.vehicleId)
-        if (vehicle.isPresent) {
-            vehicle.get().apply {
-                routeId = vehicleRequest.routeId
-                seatNumber = vehicleRequest.seatNumber
-                manufacturingCompany = vehicleRequest.manufacturingCompany
-                vehicleNumber = vehicleRequest.vehicleNumber
-                vehicleType = vehicleRequest.vehicleType
-                status = vehicleRequest.status
-                modifiedDate = LocalDateTime.now()
-            }
+        vehicleRepository.findById(vehicleRequest.vehicleId).ifPresent { vehicle ->
+            vehicleRequest.updateDomain(vehicle)
         }
     }
 

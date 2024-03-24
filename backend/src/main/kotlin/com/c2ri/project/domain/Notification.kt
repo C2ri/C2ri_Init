@@ -8,21 +8,15 @@ import java.time.LocalDateTime
 data class Notification(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "notificationId")
         val notificationId: Long? = null,
 
-        @Column(name = "userId")
         var userId: Long,
 
-        @Column(name = "notificationType")
         var notificationType: Int,
 
-        @Column(name = "identifier")
         var identifier: String,
 
-        @Column(name = "status")
         var status: String,
 
-        @Column(name = "createdDate")
         var createdDate: LocalDateTime
 )
